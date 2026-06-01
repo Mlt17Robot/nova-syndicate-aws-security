@@ -1,0 +1,35 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Nova Syndicate - Auto Scaling Group for private EC2 application instances"
+
+Resources:
+
+  NovaAppAutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AutoScalingGroupName: NovaSyndicate-App-ASG
+      MinSize: "2"
+      DesiredCapacity: "2"
+      MaxSize: "4"
+      VPCZoneIdentifier:
+        - !ImportValue NovaSyndicate-PrivateAppSubnetA
+        - !ImportValue NovaSyndicate-PrivateAppSubnetB
+      LaunchTemplate:
+        LaunchTemplateId: !ImportValue NovaSyndicate-AppLaunchTemplateId
+        Version: "1"
+      TargetGroupARNs:
+        - !ImportValue NovaSyndicate-AppTargetGroupArn
+      HealthCheckType: ELB
+      HealthCheckGracePeriod: 300
+      Tags:
+        - Key: Name
+          Value: NovaSyndicate-App-Instance
+          PropagateAtLaunch: true
+        - Key: Project
+          Value: NovaSyndicate
+          PropagateAtLaunch: true
+
+Outputs:
+
+  NovaAppASGName:
+    Description: Auto Scaling Group Name
+    Value: !Ref NovaAppAutoScalingGroup

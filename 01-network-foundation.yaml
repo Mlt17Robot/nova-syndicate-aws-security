@@ -300,3 +300,39 @@ Outputs:
     Value: !Ref PrivateRouteTable
     Export:
       Name: !Sub "${ProjectName}-${Environment}-PrivateRouteTableId"
+
+  PublicSubnetAId:
+    Description: Public Subnet A ID
+    Value: !Ref PublicSubnetA
+    Export:
+      Name: NovaSyndicate-PublicSubnetA
+
+  PublicSubnetBId:
+    Description: Public Subnet B ID
+    Value: !Ref PublicSubnetB
+    Export:
+      Name: NovaSyndicate-PublicSubnetB
+
+  PrivateAppSubnetAId:
+    Description: Private App Subnet A ID
+    Value: !Ref PrivateAppSubnetA
+    Export:
+      Name: NovaSyndicate-PrivateAppSubnetA
+
+  PrivateAppSubnetBId:
+    Description: Private App Subnet B ID
+    Value: !Ref PrivateAppSubnetB
+    Export:
+      Name: NovaSyndicate-PrivateAppSubnetB
+
+  PrivateDBSubnetAId:
+    Description: Private DB Subnet A ID
+    Value: !Ref PrivateDataSubnetA
+    Export:
+      Name: NovaSyndicate-PrivateDBSubnetA
+
+  PrivateDBSubnetBId:
+    Description: Private DB Subnet B ID
+    Value: !Ref PrivateDataSubnetB
+    Export:
+      Name: NovaSyndicate-PrivateDBSubnetB

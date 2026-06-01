@@ -1,0 +1,54 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Nova Syndicate - Application Load Balancer"
+
+Resources:
+
+  NovaApplicationLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: NovaSyndicate-ALB
+      Scheme: internet-facing
+      Type: application
+      SecurityGroups:
+        - !ImportValue NovaSyndicate-ALBSecurityGroupId
+      Subnets:
+        - !ImportValue NovaSyndicate-PublicSubnetA
+        - !ImportValue NovaSyndicate-PublicSubnetB
+      Tags:
+        - Key: Project
+          Value: NovaSyndicate
+
+  NovaAppTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: NovaSyndicate-App-TG
+      Port: 80
+      Protocol: HTTP
+      VpcId: !ImportValue nova-syndicate-prod-VpcId
+      TargetType: instance
+      HealthCheckPath: /
+      HealthCheckProtocol: HTTP
+      Matcher:
+        HttpCode: 200
+
+  NovaALBListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref NovaApplicationLoadBalancer
+      Port: 80
+      Protocol: HTTP
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref NovaAppTargetGroup
+
+Outputs:
+
+  NovaALBDNSName:
+    Description: ALB DNS Name
+    Value: !GetAtt NovaApplicationLoadBalancer.DNSName
+
+  NovaAppTargetGroupArn:
+    Description: Target Group ARN
+    Value: !Ref NovaAppTargetGroup
+    Export:
+      Name: NovaSyndicate-AppTargetGroupArn

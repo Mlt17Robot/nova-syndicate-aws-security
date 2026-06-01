@@ -1,0 +1,58 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Nova Syndicate - Private PostgreSQL RDS Database"
+
+Parameters:
+
+  DBUsername:
+    Type: String
+    Default: novaadmin
+
+  DBPassword:
+    Type: String
+    NoEcho: true
+    MinLength: 12
+
+Resources:
+
+  NovaDBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: Nova Syndicate private DB subnet group
+      SubnetIds:
+        - !ImportValue NovaSyndicate-PrivateDBSubnetA
+        - !ImportValue NovaSyndicate-PrivateDBSubnetB
+      Tags:
+        - Key: Project
+          Value: NovaSyndicate
+
+  NovaPostgreSQLDatabase:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceIdentifier: nova-syndicate-postgresql
+      Engine: postgres
+      EngineVersion: "15"
+      DBInstanceClass: db.t3.micro
+      AllocatedStorage: 20
+      StorageType: gp3
+      StorageEncrypted: true
+      DBName: novasdb
+      MasterUsername: !Ref DBUsername
+      MasterUserPassword: !Ref DBPassword
+      DBSubnetGroupName: !Ref NovaDBSubnetGroup
+      VPCSecurityGroups:
+        - !ImportValue NovaSyndicate-DBSecurityGroupId
+      PubliclyAccessible: false
+      MultiAZ: false
+      BackupRetentionPeriod: 7
+      DeletionProtection: false
+      EnableCloudwatchLogsExports:
+        - postgresql
+      Tags:
+        - Key: Project
+          Value: NovaSyndicate
+
+Outputs:
+
+  NovaRDSEndpoint:
+    Description: PostgreSQL RDS Endpoint
+    Value: !GetAtt NovaPostgreSQLDatabase.Endpoint.Address

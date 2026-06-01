@@ -1,0 +1,41 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Nova Syndicate - EC2 IAM Role for SSM and CloudWatch"
+
+Resources:
+
+  NovaEC2SSMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: NovaSyndicate-EC2-SSM-Role
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+        - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+      Tags:
+        - Key: Project
+          Value: NovaSyndicate
+
+  NovaEC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      InstanceProfileName: NovaSyndicate-EC2-InstanceProfile
+      Roles:
+        - !Ref NovaEC2SSMRole
+
+Outputs:
+
+  NovaEC2InstanceProfileName:
+    Description: EC2 Instance Profile Name
+    Value: !Ref NovaEC2InstanceProfile
+    Export:
+      Name: NovaSyndicate-EC2-InstanceProfile
+
+  NovaEC2SSMRoleArn:
+    Description: EC2 IAM Role ARN
+    Value: !GetAtt NovaEC2SSMRole.Arn

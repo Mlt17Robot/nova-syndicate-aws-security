@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Nova Syndicate - Launch Template for private EC2 application instances"
+
+Parameters:
+
+  LatestAmazonLinuxAMI:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64
+
+Resources:
+
+  NovaAppLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateName: NovaSyndicate-App-LaunchTemplate
+      LaunchTemplateData:
+        ImageId: !Ref LatestAmazonLinuxAMI
+        InstanceType: t3.micro
+        IamInstanceProfile:
+          Name: !ImportValue NovaSyndicate-EC2-InstanceProfile
+        SecurityGroupIds:
+          - !ImportValue NovaSyndicate-AppSecurityGroupId
+        MetadataOptions:
+          HttpTokens: required
+          HttpEndpoint: enabled
+        UserData:
+          Fn::Base64: !Sub |
+            #!/bin/bash
+            dnf update -y
+            dnf install -y httpd amazon-cloudwatch-agent
+            systemctl enable httpd
+            systemctl start httpd
+
+            echo "<h1>Nova Syndicate Application Server</h1>" > /var/www/html/index.html
+            echo "<p>Private EC2 instance managed by Auto Scaling Group</p>" >> /var/www/html/index.html
+            echo "<p>Hostname: $(hostname)</p>" >> /var/www/html/index.html
+
+Outputs:
+
+  NovaAppLaunchTemplateId:
+    Description: Launch Template ID
+    Value: !Ref NovaAppLaunchTemplate
+    Export:
+      Name: NovaSyndicate-AppLaunchTemplateId
