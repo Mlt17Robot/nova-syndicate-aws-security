@@ -106,6 +106,9 @@ Current templates:
 
 # Sprint 2 – Compute & Database Layer
 
+## Architecture
+![Sprint 2 Architecture](Architecture/SPRINT_2_NOVA_V3.png)
+
 ## Components Deployed
 
 - IAM Role for EC2
@@ -128,8 +131,6 @@ Current templates:
 - Centralized monitoring
 
 ## Architecture
-
-![Sprint 2 Architecture](Architecture/SPRINT_2_NOVA_V3.png)
 
 ---
 
