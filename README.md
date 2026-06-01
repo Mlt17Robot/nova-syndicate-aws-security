@@ -104,19 +104,32 @@ Current templates:
 
 ---
 
-# Upcoming Sprint
+# Sprint 2 – Compute & Database Layer
 
-## Sprint 2 — Compute Layer
+## Components Deployed
 
-Next implementation steps:
+- IAM Role for EC2
+- Launch Template
+- Application Load Balancer
+- Target Group
+- Auto Scaling Group
+- Private EC2 Instances
+- PostgreSQL RDS
+- CloudWatch Alarms
+- Systems Manager Session Manager
 
-* Application Load Balancer
-* Private EC2 instances
-* RDS PostgreSQL
-* Auto Scaling
-* SSM Session Manager
-* Hardened IAM Roles
-* Secure application deployment
+## Objectives Achieved
+
+- Bastionless administration
+- High availability compute layer
+- Automated scaling
+- Private application deployment
+- Secure database connectivity
+- Centralized monitoring
+
+## Architecture
+
+![Sprint 2 Architecture](Architecture/SPRINT_2_NOVA_V3.png)
 
 ---
 
