@@ -1,142 +1,128 @@
-# Nova Syndicate — AWS Cloud Security Architecture
+# Nova Syndicate – AWS Infrastructure Modernization
 
 ## Overview
 
-Nova Syndicate is a fictional logistics company handling sensitive medical, aerospace, and defense-related components.
+Nova Syndicate is a logistics company specializing in the distribution of critical components for the medical, aerospace, and defense sectors.
 
-This project demonstrates the design and deployment of a secure AWS cloud infrastructure following enterprise security best practices and AWS Well-Architected principles.
+This project simulates a real-world cloud modernization initiative focused on:
 
-The objective is to build a resilient, segmented, monitored, and secure cloud environment using Infrastructure as Code (IaC) with AWS CloudFormation.
+* Security
+* Scalability
+* Monitoring
+* Automation
+* Business Continuity
+* Disaster Recovery
 
 ---
 
-# Architecture Diagram
+# Sprint 1 – Secure Cloud Foundation
 
-![Nova Syndicate Architecture](Architecture/SPRINT_1_NOVA_V6.png)
+### Architecture
 
-# Sprint 1 — Secure Foundation
+![Sprint 1 Architecture](Architecture/SPRINT_1_NOVA.png)
 
-## Implemented Components
+## Objectives
 
-### Network Architecture
+Build a secure AWS foundation with network segmentation, monitoring, and security controls.
 
-* Multi-AZ VPC architecture
-* Public Subnets
-* Private Application Subnets
-* Private Database Subnets
+### Implemented Services
+
+* Amazon VPC
+* Public & Private Subnets
 * Internet Gateway
 * NAT Gateway
 * Route Tables
 * Security Groups
-* NACL segmentation
-
-### Security & Monitoring
-
-* AWS KMS encryption
-* AWS CloudTrail
-* VPC Flow Logs
-* CloudWatch Logs
-* GuardDuty
-* Security Hub
-* Secure S3 logging bucket
-* Centralized monitoring architecture
-
-### Private AWS Access
-
-* S3 Gateway Endpoint
-* SSM Endpoint
-* EC2 Messages Endpoint
-* SSM Messages Endpoint
-* CloudWatch Logs Endpoint
-
----
-
-# Security Objectives
-
-This architecture was designed with the following security principles:
-
-* Zero Trust network segmentation
-* No direct internet access to workloads
-* Private database isolation
-* Centralized logging and auditability
-* Reduced attack surface
-* Encrypted logs and storage
-* Secure private communication with AWS services
-
----
-
-# Traffic Flow
-
-Internet → Application Load Balancer → Private Application Layer → Private Database Layer
-
-Private workloads access AWS services through VPC Endpoints instead of public internet connectivity.
-
----
-
-# AWS Services Used
-
-* Amazon VPC
-* AWS CloudFormation
-* Amazon EC2
-* Amazon RDS PostgreSQL
-* AWS CloudTrail
-* Amazon CloudWatch
+* NACLs
 * AWS KMS
-* Amazon S3
-* AWS Security Hub
+* AWS CloudTrail
 * Amazon GuardDuty
-* AWS IAM
+* AWS Security Hub
 * VPC Endpoints
 
 ---
 
-# Infrastructure as Code
+# Sprint 2 – Compute & Database Platform
 
-All resources are deployed using AWS CloudFormation templates.
+### Architecture
 
-Current templates:
+![Sprint 2 Architecture](Architecture/SPRINT_2_NOVA.png)
 
-* 01-network-foundation.yaml
-* 02-security-iam-kms.yaml
-* 03-logging-monitoring.yaml
-* 05-vpc-endpoints.yaml
-* 06-security-groups.yaml
+## Objectives
 
----
+Deploy the application and database layers with secure administration.
 
-# Sprint 2 – Compute & Database Layer
+### Implemented Services
 
-## Architecture
-![Sprint 2 Architecture](Architecture/SPRINT_2_NOVA_V3.png)
-
-## Components Deployed
-
-- IAM Role for EC2
-- Launch Template
-- Application Load Balancer
-- Target Group
-- Auto Scaling Group
-- Private EC2 Instances
-- PostgreSQL RDS
-- CloudWatch Alarms
-- Systems Manager Session Manager
-
-## Objectives Achieved
-
-- Bastionless administration
-- High availability compute layer
-- Automated scaling
-- Private application deployment
-- Secure database connectivity
-- Centralized monitoring
-
-## Architecture
+* IAM Roles
+* Instance Profiles
+* Launch Templates
+* Application Load Balancer
+* Target Groups
+* Auto Scaling Group
+* Amazon EC2
+* AWS Systems Manager
+* Amazon RDS PostgreSQL
+* CloudWatch Metrics
 
 ---
 
-# Author
+# Sprint 3 – Operations, Monitoring & Resilience
 
-Lionel Mpata
+### Architecture
 
-AWS Certified Solutions Architect – Associate
-Cloud Security & AWS Architecture Enthusiast
+![Sprint 3 Architecture](Architecture/SPRINT_3_NOVA.png)
+
+## Objectives
+
+Improve observability, alerting, centralized logging and backup strategy.
+
+### Implemented Services
+
+#### Monitoring
+
+* CloudWatch Dashboard
+* CloudWatch Alarms
+* SNS Notifications
+
+#### Logging
+
+* CloudWatch Logs
+* Application Logs
+* Security Logs
+* SSM Logs
+* Metric Filter (ERROR)
+
+#### Resilience
+
+* AWS Backup Vault
+* Backup Plan
+* Backup Selection
+* Automated Backups
+
+---
+
+# Current Architecture Features
+
+* Bastionless administration using Systems Manager
+* No SSH exposure
+* Private EC2 instances
+* Encrypted PostgreSQL database
+* Centralized logging
+* Real-time monitoring
+* Automated backups
+* Security monitoring
+
+---
+
+# Next Phase
+
+Sprint 4 – Business Continuity, Disaster Recovery & Automation
+
+Planned deliverables:
+
+* BCP
+* DRP
+* RTO/RPO definition
+* Automation scripts
+* Operational runbooks
