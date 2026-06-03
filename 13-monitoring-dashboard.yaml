@@ -1,0 +1,150 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Nova Syndicate - CloudWatch Monitoring Dashboard and SNS Alerts"
+
+Parameters:
+  AlertEmail:
+    Type: String
+    Description: Email address to receive CloudWatch alerts
+
+Resources:
+
+  NovaAlertTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: NovaSyndicate-CloudWatch-Alerts
+
+  NovaAlertSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      Protocol: email
+      Endpoint: !Ref AlertEmail
+      TopicArn: !Ref NovaAlertTopic
+
+  EC2HighCPUAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: NovaSyndicate-EC2-High-CPU
+      AlarmDescription: "Alert when EC2 CPU is higher than 70%"
+      Namespace: AWS/EC2
+      MetricName: CPUUtilization
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 70
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref NovaAlertTopic
+      Dimensions:
+        - Name: AutoScalingGroupName
+          Value: NovaSyndicate-App-ASG
+
+  EC2StatusCheckAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: NovaSyndicate-EC2-StatusCheck-Failed
+      AlarmDescription: "Alert when EC2 status check fails"
+      Namespace: AWS/EC2
+      MetricName: StatusCheckFailed
+      Statistic: Maximum
+      Period: 60
+      EvaluationPeriods: 2
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref NovaAlertTopic
+      Dimensions:
+        - Name: AutoScalingGroupName
+          Value: NovaSyndicate-App-ASG
+
+  RDSHighCPUAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: NovaSyndicate-RDS-High-CPU
+      AlarmDescription: "Alert when RDS CPU is higher than 70%"
+      Namespace: AWS/RDS
+      MetricName: CPUUtilization
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 70
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref NovaAlertTopic
+      Dimensions:
+        - Name: DBInstanceIdentifier
+          Value: nova-syndicate-postgresql
+
+  RDSLowStorageAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: NovaSyndicate-RDS-Low-Free-Storage
+      AlarmDescription: "Alert when RDS free storage is below 5 GB"
+      Namespace: AWS/RDS
+      MetricName: FreeStorageSpace
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 5368709120
+      ComparisonOperator: LessThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions:
+        - !Ref NovaAlertTopic
+      Dimensions:
+        - Name: DBInstanceIdentifier
+          Value: nova-syndicate-postgresql
+
+  NovaMonitoringDashboard:
+    Type: AWS::CloudWatch::Dashboard
+    Properties:
+      DashboardName: NovaSyndicate-Operations-Dashboard
+      DashboardBody: |
+        {
+          "widgets": [
+            {
+              "type": "metric",
+              "x": 0,
+              "y": 0,
+              "width": 12,
+              "height": 6,
+              "properties": {
+                "metrics": [
+                  [ "AWS/EC2", "CPUUtilization", "AutoScalingGroupName", "NovaSyndicate-App-ASG" ],
+                  [ "AWS/EC2", "StatusCheckFailed", "AutoScalingGroupName", "NovaSyndicate-App-ASG" ]
+                ],
+                "period": 300,
+                "stat": "Average",
+                "region": "eu-west-3",
+                "title": "EC2 - Auto Scaling Group Health"
+              }
+            },
+            {
+              "type": "metric",
+              "x": 12,
+              "y": 0,
+              "width": 12,
+              "height": 6,
+              "properties": {
+                "metrics": [
+                  [ "AWS/RDS", "CPUUtilization", "DBInstanceIdentifier", "nova-syndicate-postgresql" ],
+                  [ "AWS/RDS", "FreeStorageSpace", "DBInstanceIdentifier", "nova-syndicate-postgresql" ]
+                ],
+                "period": 300,
+                "stat": "Average",
+                "region": "eu-west-3",
+                "title": "RDS PostgreSQL Metrics"
+              }
+            }
+          ]
+        }
+
+Outputs:
+  SNSTopicArn:
+    Description: SNS Topic ARN for CloudWatch alerts
+    Value: !Ref NovaAlertTopic
+
+  DashboardName:
+    Description: CloudWatch Dashboard Name
+    Value: !Ref NovaMonitoringDashboard

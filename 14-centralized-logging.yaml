@@ -1,0 +1,64 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Nova Syndicate - Centralized CloudWatch Logging"
+
+Parameters:
+  LogRetentionDays:
+    Type: Number
+    Default: 30
+    Description: CloudWatch Logs retention in days
+
+Resources:
+
+  AppLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /nova-syndicate/app
+      RetentionInDays: !Ref LogRetentionDays
+
+  SSMLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /nova-syndicate/ssm
+      RetentionInDays: !Ref LogRetentionDays
+
+
+  SecurityLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /nova-syndicate/security
+      RetentionInDays: !Ref LogRetentionDays
+
+  AppErrorMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName: !Ref AppLogGroup
+      FilterPattern: '"ERROR"'
+      MetricTransformations:
+        - MetricNamespace: NovaSyndicate/Application
+          MetricName: ApplicationErrorCount
+          MetricValue: "1"
+
+  AppErrorAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: NovaSyndicate-App-Error-Detected
+      AlarmDescription: "Alert when application logs contain ERROR"
+      Namespace: NovaSyndicate/Application
+      MetricName: ApplicationErrorCount
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+
+Outputs:
+  AppLogGroupName:
+    Description: Application Log Group
+    Value: !Ref AppLogGroup
+
+  SSMLogGroupName:
+    Description: SSM Log Group
+    Value: !Ref SSMLogGroup
+
+  

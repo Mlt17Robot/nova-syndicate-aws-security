@@ -145,3 +145,5 @@ Outputs:
   KMSKeyArn:
     Description: KMS Key ARN
     Value: !GetAtt NovaSecurityKMSKey.Arn
+    Export:
+      Name: NovaSyndicate-KMSKeyArn

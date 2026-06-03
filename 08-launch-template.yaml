@@ -20,6 +20,17 @@ Resources:
           Name: !ImportValue NovaSyndicate-EC2-InstanceProfile
         SecurityGroupIds:
           - !ImportValue NovaSyndicate-AppSecurityGroupId
+        
+        TagSpecifications:
+          - ResourceType: instance
+            Tags:
+              - Key: Name
+                Value: NovaSyndicate-App
+              - Key: Project
+                Value: NovaSyndicate
+              - Key: Backup
+                Value: true
+        
         MetadataOptions:
           HttpTokens: required
           HttpEndpoint: enabled
