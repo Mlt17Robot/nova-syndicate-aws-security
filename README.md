@@ -1,128 +1,362 @@
-# Nova Syndicate – AWS Infrastructure Modernization
+# Nova Syndicate – AWS Cloud Security & Infrastructure Modernization
 
-## Overview
+## Project Overview
 
-Nova Syndicate is a logistics company specializing in the distribution of critical components for the medical, aerospace, and defense sectors.
+Nova Syndicate is a fictional logistics company specializing in the distribution of critical components for the medical, aerospace, and defense industries.
 
-This project simulates a real-world cloud modernization initiative focused on:
+This project simulates a real-world cloud modernization engagement where a legacy infrastructure is redesigned using AWS best practices for security, scalability, resilience, automation, and operational excellence.
 
-* Security
-* Scalability
-* Monitoring
-* Automation
-* Business Continuity
-* Disaster Recovery
+The objective is to transform a fragmented on-premise environment into a secure, highly available, and operationally mature AWS platform.
+
+---
+
+## Business Context
+
+Nova Syndicate operates from:
+
+* Headquarters: Lyon, France
+* Regional Office: Marseille, France
+* 20 Remote Employees
+
+### Challenges
+
+* No centralized identity management
+* No monitoring platform
+* No backup strategy
+* No disaster recovery procedures
+* Limited operational visibility
+* Manual administration processes
+
+### Objectives
+
+* Centralize identity and access management
+* Improve security posture
+* Increase scalability and availability
+* Implement monitoring and logging
+* Establish business continuity and disaster recovery procedures
+* Automate operational tasks
+
+---
+
+# Final Architecture
+
+![Final Architecture](Architecture/SPRINT_4_NOVA.png)
+
+---
+
+# Sprint Overview
 
 ---
 
 # Sprint 1 – Secure Cloud Foundation
 
-### Architecture
-
 ![Sprint 1 Architecture](Architecture/SPRINT_1_NOVA.png)
 
 ## Objectives
 
-Build a secure AWS foundation with network segmentation, monitoring, and security controls.
+Build a secure and scalable AWS foundation.
 
-### Implemented Services
+## Deliverables
 
-* Amazon VPC
-* Public & Private Subnets
-* Internet Gateway
-* NAT Gateway
+* Multi-AZ VPC Architecture
+* Public and Private Subnets
 * Route Tables
 * Security Groups
-* NACLs
-* AWS KMS
-* AWS CloudTrail
-* Amazon GuardDuty
+* IAM Foundations
+* AWS KMS Encryption
+* CloudTrail Logging
+* AWS GuardDuty
 * AWS Security Hub
+* VPC Endpoints
+
+## AWS Services
+
+* VPC
+* IAM
+* KMS
+* CloudTrail
+* GuardDuty
+* Security Hub
 * VPC Endpoints
 
 ---
 
 # Sprint 2 – Compute & Database Platform
 
-### Architecture
-
 ![Sprint 2 Architecture](Architecture/SPRINT_2_NOVA.png)
 
 ## Objectives
 
-Deploy the application and database layers with secure administration.
+Deploy a highly available application and database layer.
 
-### Implemented Services
+## Deliverables
 
-* IAM Roles
-* Instance Profiles
-* Launch Templates
-* Application Load Balancer
-* Target Groups
+* Launch Template
 * Auto Scaling Group
-* Amazon EC2
-* AWS Systems Manager
-* Amazon RDS PostgreSQL
-* CloudWatch Metrics
+* Application Load Balancer
+* EC2 Private Instances
+* PostgreSQL RDS
+* CloudWatch Alarms
+* Systems Manager Administration
+
+## AWS Services
+
+* EC2
+* Auto Scaling
+* Application Load Balancer
+* RDS PostgreSQL
+* Systems Manager
+* CloudWatch
 
 ---
 
 # Sprint 3 – Operations, Monitoring & Resilience
 
-### Architecture
-
 ![Sprint 3 Architecture](Architecture/SPRINT_3_NOVA.png)
 
 ## Objectives
 
-Improve observability, alerting, centralized logging and backup strategy.
+Improve observability, backup management, and operational resilience.
 
-### Implemented Services
+## Deliverables
 
-#### Monitoring
-
+* AWS Backup
+* Backup Vault
+* Backup Selection
 * CloudWatch Dashboard
-* CloudWatch Alarms
+* Centralized Logging
+* Enhanced Monitoring
 * SNS Notifications
 
-#### Logging
+## AWS Services
 
+* AWS Backup
+* CloudWatch Dashboard
 * CloudWatch Logs
-* Application Logs
-* Security Logs
-* SSM Logs
-* Metric Filter (ERROR)
-
-#### Resilience
-
-* AWS Backup Vault
-* Backup Plan
-* Backup Selection
-* Automated Backups
+* SNS
+* CloudTrail
 
 ---
 
-# Current Architecture Features
+# Sprint 4 – Business Continuity, Disaster Recovery & Automation
 
-* Bastionless administration using Systems Manager
-* No SSH exposure
-* Private EC2 instances
-* Encrypted PostgreSQL database
-* Centralized logging
-* Real-time monitoring
-* Automated backups
-* Security monitoring
+![Sprint 4 Architecture](Architecture/SPRINT_4_NOVA.png)
+
+## Objectives
+
+Strengthen operational resilience through business continuity planning, disaster recovery procedures, automation, and operational documentation.
+
+## Deliverables
+
+### Business Continuity Plan (BCP)
+
+* EC2 Failure Recovery
+* Availability Zone Failure Recovery
+* IAM Compromise Procedures
+* Database Service Degradation Procedures
+
+### Disaster Recovery Plan (DRP)
+
+* RTO / RPO Definition
+* Database Restore Procedures
+* Backup Recovery Procedures
+* Regional Disaster Strategy
+
+### Automation
+
+Python health-check script using boto3:
+
+```bash
+NOVA SYNDICATE HEALTH CHECK
+
+RDS: OK
+ASG: OK
+ALB: OK
+CloudWatch: OK
+Backup: OK
+
+GLOBAL STATUS: HEALTHY
+```
+
+### Operational Documentation
+
+* Operational Runbook
+* Startup Procedures
+* Shutdown Procedures
+* Daily Operational Checks
+* Incident Response Procedures
+
+## AWS Services
+
+* AWS Backup
+* CloudWatch
+* CloudTrail
+* GuardDuty
+* Security Hub
+* Systems Manager
+* IAM
+* RDS PostgreSQL
 
 ---
 
-# Next Phase
+# Technology Stack
 
-Sprint 4 – Business Continuity, Disaster Recovery & Automation
+## Cloud Platform
 
-Planned deliverables:
+* Amazon Web Services (AWS)
 
-* BCP
-* DRP
-* RTO/RPO definition
-* Automation scripts
-* Operational runbooks
+## Infrastructure as Code
+
+* AWS CloudFormation
+
+## Security
+
+* IAM
+* KMS
+* CloudTrail
+* GuardDuty
+* Security Hub
+
+## Monitoring & Logging
+
+* CloudWatch
+* CloudWatch Logs
+* SNS
+
+## Backup & Recovery
+
+* AWS Backup
+* Backup Vault
+* RDS Snapshots
+
+## Automation
+
+* Python
+* boto3
+
+---
+
+# Recovery Objectives
+
+| Service             | RTO     | RPO      |
+| ------------------- | ------- | -------- |
+| Web Application     | 2 Hours | 24 Hours |
+| PostgreSQL Database | 4 Hours | 24 Hours |
+| Monitoring Platform | 4 Hours | 24 Hours |
+
+---
+
+# Security Features
+
+* Principle of Least Privilege
+* Encryption at Rest using AWS KMS
+* Centralized Logging
+* Audit Trails
+* Threat Detection
+* Security Monitoring
+* Backup Protection
+* Operational Runbooks
+
+---
+
+# Operational Resilience
+
+## Business Continuity
+
+* Auto Scaling Recovery
+* Multi-AZ Architecture
+* Incident Response Procedures
+* Operational Documentation
+
+## Disaster Recovery
+
+* AWS Backup
+* Recovery Procedures
+* Backup Validation
+* Future Cross-Region Strategy
+
+---
+
+# Repository Structure
+
+```text
+Architecture/
+├── SPRINT_1_NOVA.png
+├── SPRINT_2_NOVA.png
+├── SPRINT_3_NOVA.png
+└── SPRINT_4_NOVA.png
+
+automation/
+└── 16-automation-health-check.py
+
+documentation/
+├── Nova_Syndicate_BCP.md
+├── Nova_Syndicate_DRP.md
+└── Nova_Syndicate_Runbook.md
+
+templates/
+├── 01-network-foundation.yaml
+├── 02-security-iam-kms.yaml
+├── ...
+└── backup-stack.yaml
+
+README.md
+```
+
+---
+
+# Skills Demonstrated
+
+### Cloud Architecture
+
+* AWS Architecture Design
+* High Availability
+* Scalability
+* Infrastructure as Code
+
+### Cloud Security
+
+* IAM Design
+* Encryption Management
+* Threat Detection
+* Security Monitoring
+
+### Operations
+
+* Monitoring & Alerting
+* Backup Management
+* Incident Response
+* Operational Documentation
+
+### Automation
+
+* Python Scripting
+* boto3 SDK
+* Health Checks
+* Infrastructure Validation
+
+---
+
+# Future Improvements
+
+## Sprint 5 – DevSecOps & CI/CD
+
+Planned enhancements:
+
+* AWS CodePipeline
+* AWS CodeBuild
+* GitHub Integration
+* Security Scanning
+* Infrastructure Validation
+* Automated CloudFormation Deployments
+* DevSecOps Pipeline
+
+---
+
+# Author
+
+**Lionel Mpata**
+
+AWS Certified Solutions Architect – Associate
+
+Cloud Security & AWS Architecture Enthusiast
