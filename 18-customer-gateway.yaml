@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Nova Syndicate - Sprint 5B - Customer Gateway for pfSense Marseille Site
+
+Resources:
+
+  NovaSyndicateCustomerGateway:
+    Type: AWS::EC2::CustomerGateway
+    Properties:
+      Type: ipsec.1
+      BgpAsn: 65000
+      IpAddress: 176.143.138.76
+      Tags:
+        - Key: Name
+          Value: NovaSyndicate-CGW-pfSense-Marseille
+        - Key: Project
+          Value: NovaSyndicate
+        - Key: Sprint
+          Value: Sprint5B
+        - Key: Site
+          Value: Marseille-OnPrem
+        - Key: Device
+          Value: pfSense
+
+Outputs:
+
+  NovaSyndicateCGWId:
+    Description: Customer Gateway ID for pfSense Marseille site
+    Value: !Ref NovaSyndicateCustomerGateway
+    Export:
+      Name: NovaSyndicate-CGW-ID
+
+  NovaSyndicateCGWPublicIP:
+    Description: pfSense public IP address
+    Value: 176.143.138.76
+    Export:
+      Name: NovaSyndicate-CGW-Public-IP

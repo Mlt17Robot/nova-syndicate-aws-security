@@ -1,0 +1,75 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Nova Syndicate - Sprint 5 - Marseille Branch VPC
+
+Resources:
+
+  MarseilleVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.20.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: NovaSyndicate-Marseille-VPC
+        - Key: Project
+          Value: NovaSyndicate
+        - Key: Sprint
+          Value: Sprint5
+        - Key: Site
+          Value: Marseille
+
+  MarseillePrivateSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref MarseilleVPC
+      CidrBlock: 10.20.1.0/24
+      AvailabilityZone: eu-west-3a
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: NovaSyndicate-Marseille-Private-Subnet
+        - Key: Site
+          Value: Marseille
+
+  MarseillePrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref MarseilleVPC
+      Tags:
+        - Key: Name
+          Value: NovaSyndicate-Marseille-Private-RT
+        - Key: Site
+          Value: Marseille
+
+  MarseilleSubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref MarseillePrivateSubnet
+      RouteTableId: !Ref MarseillePrivateRouteTable
+
+Outputs:
+
+  MarseilleVPCId:
+    Description: Marseille VPC ID
+    Value: !Ref MarseilleVPC
+    Export:
+      Name: NovaSyndicate-Marseille-VPC-ID
+
+  MarseilleVPCCidr:
+    Description: Marseille VPC CIDR
+    Value: 10.20.0.0/16
+    Export:
+      Name: NovaSyndicate-Marseille-VPC-CIDR
+
+  MarseillePrivateSubnetId:
+    Description: Marseille Private Subnet ID
+    Value: !Ref MarseillePrivateSubnet
+    Export:
+      Name: NovaSyndicate-Marseille-Private-Subnet-ID
+
+  MarseillePrivateRouteTableId:
+    Description: Marseille Private Route Table ID
+    Value: !Ref MarseillePrivateRouteTable
+    Export:
+      Name: NovaSyndicate-Marseille-Private-RT-ID

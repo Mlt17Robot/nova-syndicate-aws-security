@@ -1,0 +1,33 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Nova Syndicate - Sprint 5 - Lyon Marseille VPC Peering Connectivity
+
+Resources:
+
+  LyonMarseilleVpcPeering:
+    Type: AWS::EC2::VPCPeeringConnection
+    Properties:
+      VpcId: !ImportValue nova-syndicate-prod-VpcId
+      PeerVpcId: !ImportValue NovaSyndicate-Marseille-VPC-ID
+      Tags:
+        - Key: Name
+          Value: NovaSyndicate-Lyon-Marseille-Peering
+        - Key: Project
+          Value: NovaSyndicate
+        - Key: Sprint
+          Value: Sprint5
+
+  RouteFromMarseilleToLyon:
+    Type: AWS::EC2::Route
+    DependsOn: LyonMarseilleVpcPeering
+    Properties:
+      RouteTableId: !ImportValue NovaSyndicate-Marseille-Private-RT-ID
+      DestinationCidrBlock: 10.0.0.0/16
+      VpcPeeringConnectionId: !Ref LyonMarseilleVpcPeering
+
+Outputs:
+
+  LyonMarseillePeeringId:
+    Description: VPC Peering connection between Lyon and Marseille
+    Value: !Ref LyonMarseilleVpcPeering
+    Export:
+      Name: NovaSyndicate-Lyon-Marseille-Peering-ID

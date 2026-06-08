@@ -1,0 +1,32 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Nova Syndicate - Sprint 5B - Virtual Private Gateway for AWS Site-to-Site VPN
+
+Resources:
+
+  NovaSyndicateVirtualPrivateGateway:
+    Type: AWS::EC2::VPNGateway
+    Properties:
+      Type: ipsec.1
+      Tags:
+        - Key: Name
+          Value: NovaSyndicate-VGW-Lyon
+        - Key: Project
+          Value: NovaSyndicate
+        - Key: Sprint
+          Value: Sprint5B
+        - Key: Purpose
+          Value: Site-to-Site-VPN
+
+  NovaSyndicateVGWAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !ImportValue nova-syndicate-prod-VpcId
+      VpnGatewayId: !Ref NovaSyndicateVirtualPrivateGateway
+
+Outputs:
+
+  NovaSyndicateVGWId:
+    Description: Virtual Private Gateway ID for Nova Syndicate Site-to-Site VPN
+    Value: !Ref NovaSyndicateVirtualPrivateGateway
+    Export:
+      Name: NovaSyndicate-VGW-ID

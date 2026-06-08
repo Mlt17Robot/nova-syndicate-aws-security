@@ -1,0 +1,65 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Nova Syndicate - Sprint 5 - Marseille Test EC2 Instance
+
+Parameters:
+  LatestAmiId:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64
+
+Resources:
+
+  MarseilleTestSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for Marseille connectivity test instance
+      VpcId: !ImportValue NovaSyndicate-Marseille-VPC-ID
+      SecurityGroupIngress:
+        - IpProtocol: icmp
+          FromPort: -1
+          ToPort: -1
+          CidrIp: 10.0.0.0/16
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 10.0.0.0/16
+      Tags:
+        - Key: Name
+          Value: NovaSyndicate-Marseille-Test-SG
+
+  MarseilleTestInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t3.micro
+      ImageId: !Ref LatestAmiId
+      SubnetId: !ImportValue NovaSyndicate-Marseille-Private-Subnet-ID
+      SecurityGroupIds:
+        - !Ref MarseilleTestSecurityGroup
+      Tags:
+        - Key: Name
+          Value: NovaSyndicate-Marseille-Test-Instance
+        - Key: Project
+          Value: NovaSyndicate
+        - Key: Sprint
+          Value: Sprint5
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash
+          dnf update -y
+          dnf install -y httpd
+          systemctl enable httpd
+          systemctl start httpd
+          echo "Nova Syndicate Marseille Test Instance - Sprint 5" > /var/www/html/index.html
+
+Outputs:
+
+  MarseilleTestInstanceId:
+    Description: Marseille test EC2 instance ID
+    Value: !Ref MarseilleTestInstance
+    Export:
+      Name: NovaSyndicate-Marseille-Test-Instance-ID
+
+  MarseilleTestPrivateIp:
+    Description: Private IP of Marseille test instance
+    Value: !GetAtt MarseilleTestInstance.PrivateIp
+    Export:
+      Name: NovaSyndicate-Marseille-Test-Private-IP

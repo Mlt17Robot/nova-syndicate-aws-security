@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Nova Syndicate - Sprint 5B - Site-to-Site VPN Connection
+
+Resources:
+
+  NovaSyndicateVPNConnection:
+    Type: AWS::EC2::VPNConnection
+    Properties:
+      Type: ipsec.1
+      StaticRoutesOnly: true
+      CustomerGatewayId: !ImportValue NovaSyndicate-CGW-ID
+      VpnGatewayId: !ImportValue NovaSyndicate-VGW-ID
+      Tags:
+        - Key: Name
+          Value: NovaSyndicate-SiteToSiteVPN
+        - Key: Project
+          Value: NovaSyndicate
+        - Key: Sprint
+          Value: Sprint5B
+
+Outputs:
+
+  NovaSyndicateVPNConnectionId:
+    Description: Site-to-Site VPN Connection ID
+    Value: !Ref NovaSyndicateVPNConnection
+    Export:
+      Name: NovaSyndicate-VPNConnection-ID
