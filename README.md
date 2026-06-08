@@ -42,12 +42,6 @@ Nova Syndicate operates from:
 
 ---
 
-# Final Architecture
-
-![Final Architecture](Architecture/SPRINT_5B_NOVA.png)
-
----
-
 # Sprint Progress
 
 | Sprint | Status |
