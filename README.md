@@ -226,10 +226,6 @@ The goal of this sprint was to simulate a realistic enterprise infrastructure wh
 
 # Sprint 5A – Lyon ↔ Marseille Connectivity
 
-![Sprint 5A Architecture](Architecture/SPRINT_5A_NOVA.png)
-
-## Architecture Overview
-
 To represent Nova Syndicate's regional office, a second AWS environment was deployed in Marseille.
 
 ### Lyon Site
@@ -302,7 +298,7 @@ Marseille EC2
 
 # Sprint 5B – AWS Site-to-Site VPN
 
-![Sprint 5B Architecture](Architecture/SPRINT_5B_NOVA.png)
+![Sprint 5B Architecture](Architecture/SPRINT_5_NOVA.png)
 
 ## Architecture Overview
 
