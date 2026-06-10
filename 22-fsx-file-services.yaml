@@ -1,0 +1,84 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Nova Syndicate - Sprint 7 - Secure File Services with Amazon FSx
+
+Parameters:
+  WindowsAdminSecurityGroupId:
+    Type: AWS::EC2::SecurityGroup::Id
+    Description: Security Group ID of the Windows Admin instance
+
+Resources:
+  FSxSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for Nova Syndicate FSx Windows File Server
+      VpcId: !ImportValue nova-syndicate-prod-VpcId
+      SecurityGroupIngress:
+        - Description: Allow SMB from Windows Admin server
+          IpProtocol: tcp
+          FromPort: 445
+          ToPort: 445
+          SourceSecurityGroupId: !Ref WindowsAdminSecurityGroupId
+
+        - Description: Allow SMB from Application servers
+          IpProtocol: tcp
+          FromPort: 445
+          ToPort: 445
+          SourceSecurityGroupId: !ImportValue NovaSyndicate-AppSecurityGroupId
+
+      SecurityGroupEgress:
+        - Description: Allow all outbound traffic
+          IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+
+      Tags:
+        - Key: Name
+          Value: nova-syndicate-fsx-sg
+        - Key: Project
+          Value: NovaSyndicate
+        - Key: Sprint
+          Value: Sprint7
+
+  FSxWindowsFileSystem:
+    Type: AWS::FSx::FileSystem
+    Properties:
+      FileSystemType: WINDOWS
+      StorageCapacity: 32
+      StorageType: SSD
+      SubnetIds:
+        - !ImportValue NovaSyndicate-PrivateDBSubnetA
+        - !ImportValue NovaSyndicate-PrivateDBSubnetB
+      SecurityGroupIds:
+        - !Ref FSxSecurityGroup
+      KmsKeyId: !ImportValue NovaSyndicate-KMSKeyArn
+      WindowsConfiguration:
+        ActiveDirectoryId: !ImportValue nova-syndicate-prod-DirectoryId
+        DeploymentType: MULTI_AZ_1
+        PreferredSubnetId: !ImportValue NovaSyndicate-PrivateDBSubnetA
+        ThroughputCapacity: 32
+        AutomaticBackupRetentionDays: 7
+        DailyAutomaticBackupStartTime: "02:00"
+        WeeklyMaintenanceStartTime: "7:03:00"
+        CopyTagsToBackups: true
+      Tags:
+        - Key: Name
+          Value: nova-syndicate-fsx-windows-file-server
+        - Key: Project
+          Value: NovaSyndicate
+        - Key: Sprint
+          Value: Sprint7
+        - Key: Backup
+          Value: "true"
+
+Outputs:
+  FSxFileSystemId:
+    Description: FSx Windows File System ID
+    Value: !Ref FSxWindowsFileSystem
+    Export:
+      Name: NovaSyndicate-FSxFileSystemId
+
+  FSxSecurityGroupId:
+    Description: FSx Security Group ID
+    Value: !Ref FSxSecurityGroup
+    Export:
+      Name: NovaSyndicate-FSxSecurityGroupId
+      
