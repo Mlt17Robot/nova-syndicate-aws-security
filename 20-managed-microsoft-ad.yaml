@@ -1,0 +1,52 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Nova Syndicate - Sprint 6 - AWS Managed Microsoft AD
+
+Parameters:
+  ProjectName:
+    Type: String
+    Default: nova-syndicate
+
+  Environment:
+    Type: String
+    Default: prod
+
+  DirectoryName:
+    Type: String
+    Default: corp.nova-syndicate.local
+
+  DirectoryShortName:
+    Type: String
+    Default: CORP
+
+  AdminPassword:
+    Type: String
+    NoEcho: true
+    MinLength: 8
+    Description: Password for the AWS Managed Microsoft AD Admin user
+
+Resources:
+  NovaManagedMicrosoftAD:
+    Type: AWS::DirectoryService::MicrosoftAD
+    Properties:
+      Name: !Ref DirectoryName
+      ShortName: !Ref DirectoryShortName
+      Edition: Standard
+      Password: !Ref AdminPassword
+      VpcSettings:
+        VpcId: !ImportValue nova-syndicate-prod-VpcId
+        SubnetIds:
+          - !ImportValue NovaSyndicate-PrivateAppSubnetA
+          - !ImportValue NovaSyndicate-PrivateAppSubnetB
+
+Outputs:
+  DirectoryId:
+    Description: AWS Managed Microsoft AD Directory ID
+    Value: !Ref NovaManagedMicrosoftAD
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-DirectoryId"
+
+  DirectoryName:
+    Description: AWS Managed Microsoft AD Domain Name
+    Value: !Ref DirectoryName
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-DirectoryName"

@@ -1,0 +1,62 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Nova Syndicate - Sprint 6 - Windows Admin Instance for Active Directory Management
+
+Parameters:
+  ProjectName:
+    Type: String
+    Default: nova-syndicate
+
+  Environment:
+    Type: String
+    Default: prod
+
+  InstanceType:
+    Type: String
+    Default: t3.medium
+
+  LatestWindowsAmiId:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-windows-latest/Windows_Server-2022-English-Full-Base
+
+Resources:
+  WindowsAdminSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for Windows Admin Instance
+      VpcId: !ImportValue nova-syndicate-prod-VpcId
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: !Sub "${ProjectName}-${Environment}-windows-admin-sg"
+
+  WindowsAdminInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref LatestWindowsAmiId
+      InstanceType: !Ref InstanceType
+      IamInstanceProfile: !ImportValue NovaSyndicate-EC2-InstanceProfile
+      SubnetId: !ImportValue NovaSyndicate-PrivateAppSubnetA
+      SecurityGroupIds:
+        - !Ref WindowsAdminSecurityGroup
+      Tags:
+        - Key: Name
+          Value: !Sub "${ProjectName}-${Environment}-windows-admin"
+        - Key: Project
+          Value: NovaSyndicate
+        - Key: Role
+          Value: AD-Administration
+
+Outputs:
+  WindowsAdminInstanceId:
+    Description: Windows Admin EC2 Instance ID
+    Value: !Ref WindowsAdminInstance
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-WindowsAdminInstanceId"
+
+  WindowsAdminPrivateIP:
+    Description: Private IP of the Windows Admin Instance
+    Value: !GetAtt WindowsAdminInstance.PrivateIp
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-WindowsAdminPrivateIP"

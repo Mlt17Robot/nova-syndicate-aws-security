@@ -603,14 +603,267 @@ README.md
 
 ---
 
-# Future Roadmap
+# 🚀 Sprint 6 — Centralized Identity Services
 
-## Sprint 6 – Centralized Identity Services
+![Sprint 6 Architecture](Architecture/SPRINT_6_NOVA.png)
+## Project
 
+Nova Syndicate is a fictional logistics company operating in the aerospace, medical and defense sectors.
+
+As part of its IT modernization program, Sprint 6 focused on implementing centralized identity and access management using AWS Managed Microsoft Active Directory.
+
+---
+
+## 🎯 Sprint Objective
+
+Implement a centralized identity platform capable of:
+
+- Managing users from a single directory
+- Organizing users by business roles
+- Applying Role-Based Access Control (RBAC)
+- Preparing secure file services integration
+- Supporting future VPN authentication
+- Providing enterprise-grade identity governance
+
+---
+
+## 🏗️ Architecture Overview
+
+### Identity Platform
+
+```text
+AWS Managed Microsoft AD
+│
+├── Domain
+│   └── corp.nova-syndicate.local
+│
+├── Domain Controllers
+│   ├── DC1 (AZ-a)
+│   └── DC2 (AZ-c)
+│
+├── Organizational Units
+│   ├── Users
+│   ├── Groups
+│   ├── Computers
+│   └── ServiceAccounts
+│
+└── Security Groups
+```
+
+---
+
+## 🔐 Active Directory Deployment
+
+### AWS Managed Microsoft AD
+
+Successfully deployed:
+
+```text
+Domain:
+corp.nova-syndicate.local
+
+Edition:
+Standard Edition
+
+High Availability:
+Multi-AZ
+
+Domain Controllers:
+2
+```
+
+---
+
+## 🖥️ Windows Administration Server
+
+A dedicated Windows Server 2022 instance was deployed for Active Directory administration.
+
+Features:
+
+```text
+✓ Domain Joined
+✓ AWS Systems Manager access
+✓ RSAT installed
+✓ Active Directory PowerShell module
+✓ Bastionless administration
+```
+
+---
+
+## 👥 Organizational Units
+
+Created OU structure:
+
+```text
+NovaSyndicate
+│
+├── Users
+│   ├── IT
+│   ├── Finance
+│   ├── HR
+│   ├── Sales
+│   └── Executive
+│
+├── Groups
+│
+├── Computers
+│
+└── ServiceAccounts
+```
+
+---
+
+## 🛡️ Security Groups
+
+Implemented RBAC groups:
+
+```text
+GG_IT_Admins
+GG_Finance_Users
+GG_HR_Users
+GG_Sales_Users
+GG_Executive_Users
+GG_VPN_Users
+GG_FileServer_Admins
+```
+
+---
+
+## 👤 Users Created
+
+```text
+it.admin
+finance.user
+hr.user
+sales.user
+ceo.user
+```
+
+---
+
+## ⚙️ Service Accounts
+
+```text
+svc-fsx
+```
+
+Purpose:
+
+```text
+Future Amazon FSx integration
+```
+
+---
+
+## 🌐 DHCP Option Set Integration
+
+Configured VPC DHCP settings:
+
+```text
+Domain:
+corp.nova-syndicate.local
+
+DNS Servers:
+10.0.11.218
+10.0.12.112
+```
+
+Benefits:
+
+```text
+✓ Automatic AD DNS resolution
+✓ Automatic domain discovery
+✓ Simplified future EC2 deployments
+✓ Seamless Active Directory integration
+```
+
+---
+
+## ✅ Validation Performed
+
+### Active Directory
+
+```text
+✓ Domain reachable
+✓ DNS resolution working
+✓ Domain controllers reachable
+✓ Active Directory PowerShell operational
+```
+
+### Windows Server
+
+```text
+✓ Domain Join successful
+✓ RSAT installed
+✓ Active Directory administration operational
+```
+
+### Identity Management
+
+```text
+✓ OU creation validated
+✓ Security groups validated
+✓ Users created successfully
+✓ Group membership validated
+✓ Service account validated
+```
+
+### AWS Integration
+
+```text
+✓ DHCP Option Set created
+✓ DHCP Option Set associated to VPC
+✓ AD DNS servers distributed automatically
+```
+
+---
+
+## 📊 Skills Demonstrated
+
+### AWS
+
+- AWS Directory Service
 - AWS Managed Microsoft AD
+- EC2 Windows Administration
+- Systems Manager
+- VPC DHCP Option Sets
+- Multi-AZ Architecture
+
+### Microsoft Active Directory
+
+- Active Directory Administration
+- Domain Join
+- Organizational Units
+- Security Groups
+- RBAC
+- Service Accounts
+- DNS Integration
+
+### Security
+
+- Identity Governance
+- Least Privilege
+- Role-Based Access Control
 - Centralized Authentication
-- Directory Integration
-- Identity Federation
+
+---
+
+## 📷 Architecture Diagram
+
+```text
+diagrams/SPRINT_6_NOVA.png
+```
+
+---
+
+## 🎯 Business Value
+
+This sprint transformed Nova Syndicate from isolated user management into a centralized enterprise identity platform capable of supporting secure access management, future file services and remote workforce integration.
+
+---
+
+## 🚀 Next Sprint
+---
 
 ## Sprint 7 – Secure File Services
 
