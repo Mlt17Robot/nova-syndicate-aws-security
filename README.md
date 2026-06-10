@@ -52,8 +52,8 @@ Nova Syndicate operates from:
 | Sprint 4 – Business Continuity, Disaster Recovery & Automation | ✅ Completed |
 | Sprint 5A – Lyon ↔ Marseille Connectivity | ✅ Completed |
 | Sprint 5B – AWS Site-to-Site VPN | ✅ Completed |
-| Sprint 6 – Centralized Identity Services | 🔜 Next |
-| Sprint 7 – Secure File Services | ⏳ Planned |
+| Sprint 6 – Centralized Identity Services | ✅ Completed |
+| Sprint 7 – Secure File Services | 🔜 Next |
 | Sprint 8 – Remote Workforce Access | ⏳ Planned |
 | Sprint 9 – DevSecOps & Infrastructure Automation | ⏳ Planned |
 | Sprint 10 – Security Operations Center | ⏳ Planned |
