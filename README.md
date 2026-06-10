@@ -606,13 +606,6 @@ README.md
 # 🚀 Sprint 6 — Centralized Identity Services
 
 ![Sprint 6 Architecture](Architecture/SPRINT_6_NOVA.png)
-## Project
-
-Nova Syndicate is a fictional logistics company operating in the aerospace, medical and defense sectors.
-
-As part of its IT modernization program, Sprint 6 focused on implementing centralized identity and access management using AWS Managed Microsoft Active Directory.
-
----
 
 ## 🎯 Sprint Objective
 
