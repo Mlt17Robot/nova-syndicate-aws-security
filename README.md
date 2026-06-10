@@ -53,8 +53,8 @@ Nova Syndicate operates from:
 | Sprint 5A – Lyon ↔ Marseille Connectivity | ✅ Completed |
 | Sprint 5B – AWS Site-to-Site VPN | ✅ Completed |
 | Sprint 6 – Centralized Identity Services | ✅ Completed |
-| Sprint 7 – Secure File Services | 🔜 Next |
-| Sprint 8 – Remote Workforce Access | ⏳ Planned |
+| Sprint 7 – Secure File Services | ✅ Completed |
+| Sprint 8 – Remote Workforce Access | 🔜 Next |
 | Sprint 9 – DevSecOps & Infrastructure Automation | ⏳ Planned |
 | Sprint 10 – Security Operations Center | ⏳ Planned |
 | Sprint 11 – Cost Optimization & FinOps | ⏳ Planned |
@@ -855,20 +855,319 @@ This sprint transformed Nova Syndicate from isolated user management into a cent
 
 ---
 
-## 🚀 Next Sprint
+# 🚀 Sprint 7 – Secure File Services & RBAC
+
+![Sprint 7 Architecture](Architecture/SPRINT_7_NOVA.png)
+
+## 🎯 Sprint Objective
+
+Implement enterprise-grade file services integrated with Active Directory while enforcing Role-Based Access Control (RBAC).
+
+Objectives:
+
+* Centralize file storage
+* Secure department data
+* Integrate file services with Active Directory
+* Apply role-based access control
+* Protect business-critical files
+* Prepare future remote workforce access
+
 ---
 
-## Sprint 7 – Secure File Services
+## 🏗️ Architecture Overview
 
-- Amazon FSx
-- Shared Enterprise Storage
-- Access Control
+### File Services Platform
 
-## Sprint 8 – Remote Workforce Access
+```text
+AWS Managed Microsoft AD
+        │
+        ▼
+Amazon FSx for Windows File Server
+        │
+        ▼
+Department Shares
 
-- AWS Client VPN
-- Secure Remote Access
-- Workforce Connectivity
+├── Finance
+├── HR
+├── Sales
+├── Executive
+└── IT
+```
+
+---
+
+## 📁 Amazon FSx Deployment
+
+Successfully deployed:
+
+```text
+File System Type:
+Windows File Server
+
+Deployment Type:
+MULTI_AZ_1
+
+Storage:
+32 GB SSD
+
+Encryption:
+AWS KMS
+
+Backup Retention:
+7 Days
+
+Domain:
+corp.nova-syndicate.local
+```
+
+---
+
+## 🔐 Active Directory Integration
+
+Amazon FSx was successfully joined to:
+
+```text
+corp.nova-syndicate.local
+```
+
+Directory Information:
+
+```text
+Directory ID:
+d-806763293a
+
+Domain Controllers:
+DC1 → 10.0.11.218
+DC2 → 10.0.12.112
+```
+
+Validation completed:
+
+```text
+✓ DNS Resolution
+✓ Domain Join
+✓ SMB Connectivity
+✓ Active Directory Authentication
+✓ Name Resolution
+```
+
+---
+
+## 👥 Role-Based Access Control (RBAC)
+
+Security groups used:
+
+```text
+GG_IT_Admins
+GG_Finance_Users
+GG_HR_Users
+GG_Sales_Users
+GG_Executive_Users
+GG_VPN_Users
+GG_FileServer_Admins
+```
+
+Group membership validated:
+
+```text
+it.admin
+    ↓
+GG_IT_Admins
+
+finance.user
+    ↓
+GG_Finance_Users
+
+hr.user
+    ↓
+GG_HR_Users
+
+sales.user
+    ↓
+GG_Sales_Users
+
+ceo.user
+    ↓
+GG_Executive_Users
+```
+
+---
+
+## 📂 Enterprise File Shares
+
+Shared folders created:
+
+```text
+Finance
+HR
+Sales
+Executive
+IT
+```
+
+Future permissions model:
+
+```text
+Finance   → GG_Finance_Users
+HR        → GG_HR_Users
+Sales     → GG_Sales_Users
+Executive → GG_Executive_Users
+IT        → GG_IT_Admins
+```
+
+---
+
+## 🖥️ Windows Administration
+
+The Windows Administration Server was used to:
+
+```text
+✓ Manage Active Directory
+✓ Validate Group Membership
+✓ Verify Domain Connectivity
+✓ Test SMB Access
+✓ Administer Amazon FSx
+```
+
+Authentication validation:
+
+```text
+whoami
+
+CORP\Admin
+```
+
+Domain validation:
+
+```text
+net user /domain
+
+Admin
+ceo.user
+finance.user
+hr.user
+it.admin
+sales.user
+svc-fsx
+```
+
+---
+
+## 🔒 Security Controls
+
+Implemented:
+
+```text
+✓ Active Directory Authentication
+✓ Centralized Authorization
+✓ Role-Based Access Control (RBAC)
+✓ SMB Access Control
+✓ AWS KMS Encryption
+✓ Multi-AZ High Availability
+✓ Daily Backups
+✓ Backup Retention Policy
+```
+
+---
+
+## ✅ Validation Performed
+
+### Active Directory
+
+```text
+✓ Domain Controllers Reachable
+✓ Users Created
+✓ Groups Created
+✓ Group Membership Verified
+✓ Service Account Validated
+```
+
+### Amazon FSx
+
+```text
+✓ File System Available
+✓ DNS Resolution Working
+✓ SMB Port 445 Reachable
+✓ Share Accessible
+✓ Department Structure Created
+```
+
+### Security
+
+```text
+✓ Authentication Validated
+✓ RBAC Validated
+✓ Encryption Enabled
+✓ Backup Policy Active
+```
+
+---
+
+## 📊 Skills Demonstrated
+
+### AWS
+
+* Amazon FSx for Windows File Server
+* AWS Directory Service
+* AWS Backup
+* AWS KMS
+* Systems Manager
+* Multi-AZ Architecture
+
+### Microsoft
+
+* Active Directory Integration
+* SMB File Services
+* Windows Administration
+* Organizational Units
+* Security Groups
+* Group Membership Management
+
+### Security
+
+* Least Privilege
+* Role-Based Access Control (RBAC)
+* Centralized Authentication
+* Enterprise File Security
+* Identity Governance
+
+---
+
+## 🎯 Business Value
+
+Nova Syndicate now benefits from a centralized and secure enterprise file platform integrated with Active Directory.
+
+The environment supports:
+
+```text
+✓ Department-Based File Storage
+✓ Centralized Access Management
+✓ Enterprise Authentication
+✓ Role-Based Permissions
+✓ Encrypted File Storage
+✓ High Availability
+✓ Operational Resilience
+```
+
+This sprint completes the Identity & Access Management phase by extending Active Directory into secure enterprise file services.
+
+---
+
+## 🚀 Next Sprint
+
+### Sprint 8 – Remote Workforce Access
+
+Objectives:
+
+```text
+✓ AWS Client VPN
+✓ Active Directory Authentication
+✓ Secure Remote Connectivity
+✓ Remote Workforce Enablement
+✓ Integration with GG_VPN_Users
+✓ Secure Access for 20 Remote Employees
+```
+---
 
 ## Sprint 9 – DevSecOps & Infrastructure Automation
 
