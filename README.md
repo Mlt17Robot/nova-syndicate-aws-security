@@ -10,6 +10,9 @@ The objective is to transform a fragmented on-premises environment into a secure
 
 ---
 
+![Architecture Globale](Architecture/SPRINT_FINAL_NOVA.png)
+
+---
 ## Business Context
 
 Nova Syndicate operates from:
@@ -54,8 +57,8 @@ Nova Syndicate operates from:
 | Sprint 5B – AWS Site-to-Site VPN | ✅ Completed |
 | Sprint 6 – Centralized Identity Services | ✅ Completed |
 | Sprint 7 – Secure File Services | ✅ Completed |
-| Sprint 8 – Remote Workforce Access | 🔜 Next |
-| Sprint 9 – DevSecOps & Infrastructure Automation | ⏳ Planned |
+| Sprint 8 – Remote Workforce Access & Secure VPN Connectivity | ✅ Completed |
+| Sprint 9 – DevSecOps & Infrastructure Automation | 🔜 Next |
 | Sprint 10 – Security Operations Center | ⏳ Planned |
 | Sprint 11 – Cost Optimization & FinOps | ⏳ Planned |
 | Sprint 12 – Executive Architecture Package | ⏳ Planned |
@@ -1153,21 +1156,285 @@ This sprint completes the Identity & Access Management phase by extending Active
 
 ---
 
-## 🚀 Next Sprint
+# 🚀 Sprint 8 – Remote Workforce Access & Secure VPN Connectivity
 
-### Sprint 8 – Remote Workforce Access
+![Sprint 8 Architecture](Architecture/SPRINT_8_NOVA.png)
+
+## 🎯 Sprint Objective
+
+Enable secure remote access for Nova Syndicate's workforce while maintaining centralized authentication and access control.
 
 Objectives:
 
-```text
-✓ AWS Client VPN
-✓ Active Directory Authentication
-✓ Secure Remote Connectivity
-✓ Remote Workforce Enablement
-✓ Integration with GG_VPN_Users
-✓ Secure Access for 20 Remote Employees
-```
+* Provide secure remote connectivity
+* Integrate VPN authentication with Active Directory
+* Enable secure access to internal resources
+* Support remote workforce operations
+* Enforce centralized identity management
+* Validate secure access to enterprise services
+
 ---
+
+## 🏗️ Architecture Overview
+
+```text
+Remote User
+      │
+      ▼
+AWS Client VPN
+      │
+      ▼
+AWS Managed Microsoft AD
+      │
+      ▼
+Internal Resources
+
+├── Windows Administration Server
+├── Amazon FSx
+├── Active Directory
+└── Private AWS Resources
+```
+
+---
+
+## 🔐 AWS Client VPN Deployment
+
+Successfully deployed:
+
+```text
+VPN Type:
+AWS Client VPN
+
+Protocol:
+OpenVPN
+
+Transport:
+UDP 443
+
+Client CIDR:
+10.250.0.0/22
+
+Split Tunnel:
+Enabled
+```
+
+---
+
+## 👥 Active Directory Authentication
+
+Integrated with:
+
+```text
+corp.nova-syndicate.local
+```
+
+Authentication method:
+
+```text
+AWS Managed Microsoft AD
+```
+
+Dedicated VPN security group:
+
+```text
+GG_VPN_Users
+```
+
+Validation completed:
+
+```text
+✓ Active Directory Authentication
+✓ User Login Validation
+✓ Group-Based Access Control
+✓ Secure User Authentication
+```
+
+---
+
+## 🌐 Secure Remote Connectivity
+
+Remote users can securely access:
+
+```text
+Windows Administration Server
+Amazon FSx
+Domain Controllers
+Private AWS Resources
+```
+
+VPN routes configured:
+
+```text
+10.0.0.0/16
+172.16.10.0/24
+```
+
+---
+
+## 🔍 DNS & Routing Validation
+
+Successfully validated:
+
+```text
+✓ Internal DNS Resolution
+✓ Active Directory Name Resolution
+✓ VPN Route Propagation
+✓ Internal Resource Discovery
+✓ Secure Connectivity
+```
+
+Example:
+
+```text
+corp.nova-syndicate.local
+
+10.0.11.218
+10.0.12.112
+```
+
+---
+
+## 🖥️ Remote Administration Validation
+
+Validated:
+
+```text
+✓ RDP Connectivity
+✓ Windows Server Access
+✓ VPN Authentication
+✓ Internal Service Reachability
+```
+
+Windows Administration Server:
+
+```text
+10.0.11.107
+```
+
+---
+
+## 🛠️ Troubleshooting & Security Validation
+
+Issues resolved during deployment:
+
+```text
+✓ VPN Authorization Rule Correction
+✓ DNS Resolution Troubleshooting
+✓ Security Group Adjustments
+✓ VPN Routing Validation
+✓ RDP Connectivity Validation
+```
+
+Authorization correction:
+
+```text
+Incorrect:
+1.0.0.0/16
+
+Correct:
+10.0.0.0/16
+```
+
+---
+
+## 🔒 Security Controls
+
+Implemented:
+
+```text
+✓ Active Directory Authentication
+✓ Centralized Identity Management
+✓ Group-Based Access Control
+✓ Split Tunnel VPN
+✓ Encrypted VPN Communications
+✓ Private Resource Access
+✓ Least Privilege Access
+```
+
+---
+
+## ✅ Validation Performed
+
+### VPN
+
+```text
+✓ VPN Endpoint Available
+✓ Client Connection Successful
+✓ User Authentication Successful
+✓ Route Authorization Validated
+```
+
+### Active Directory
+
+```text
+✓ Domain Resolution Working
+✓ DNS Reachability Validated
+✓ User Authentication Working
+✓ Group Membership Validated
+```
+
+### Remote Access
+
+```text
+✓ Internal Resources Reachable
+✓ RDP Access Validated
+✓ Secure Connectivity Confirmed
+```
+
+---
+
+## 📊 Skills Demonstrated
+
+### AWS
+
+* AWS Client VPN
+* AWS Directory Service
+* Route Authorization
+* Security Groups
+* VPC Networking
+* Remote Access Design
+
+### Microsoft
+
+* Active Directory Authentication
+* Group-Based Access Control
+* DNS Services
+* Windows Administration
+
+### Security
+
+* Secure Remote Access
+* Identity Federation
+* Centralized Authentication
+* Least Privilege
+* VPN Security
+* Access Control
+
+---
+
+## 🎯 Business Value
+
+Nova Syndicate now supports a secure remote workforce model.
+
+The environment provides:
+
+```text
+✓ Secure Remote Access
+✓ Centralized Authentication
+✓ Enterprise VPN Connectivity
+✓ Protected Internal Resources
+✓ Workforce Mobility
+✓ Secure Administrative Access
+```
+
+## ✅ Sprint 8 Completed
+
+Remote workforce access has been successfully implemented through AWS Client VPN and Active Directory authentication.
+
+The environment now supports secure remote connectivity for Nova Syndicate employees while maintaining centralized identity and access management.
+---
+
+## 🚀 Next Sprint
 
 ## Sprint 9 – DevSecOps & Infrastructure Automation
 
